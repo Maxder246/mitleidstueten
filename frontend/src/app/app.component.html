@@ -1,10 +1,9 @@
 <div *ngIf="selfId === -1">
-  <input placeholder="Benutzername" [(ngModel)]="username" (change)="login();">
+  <input placeholder="Benutzername" [(ngModel)]="username" (change)="login();" [autofocus]>
+  <button (click)="login()">Login</button>
 </div>
 
 <div *ngIf="selfId > 0">
-  <label>{{Self.count}}</label>
-
   <div style="border: 2px solid black; height: 5rem; border-radius: 5px; padding: 10px; margin: 10px; overflow: hidden;"
     *ngFor="let user of users">
 
@@ -13,7 +12,9 @@
     <div style="float: right;">
       <h1 style="float: right;">{{user.count}}</h1>
 
-      <button style="float: right; height: 5rem; width: 5rem; margin-right: 20px;"></button>
+
+      <button *ngIf="user.id !== selfId" class="add"
+        (click)="addTute(user.id)"><i class="fas fa-hand-holding-heart"></i></button>
     </div>
   </div>
 </div>

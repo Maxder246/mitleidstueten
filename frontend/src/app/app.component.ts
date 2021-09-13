@@ -17,7 +17,7 @@ export class AppComponent implements OnInit {
   users: any[] = [];
   Self: any;
 
-  public ws = webSocket('ws://localhost:8080/');
+  public ws = webSocket('ws://192.168.100.88:8080/');
 
   username = '';
   selfId = -1;
@@ -52,8 +52,21 @@ export class AppComponent implements OnInit {
               break;
             }
             case 'update': {
-              this.count = data.count;
+              for (let i = 0; i< data.users.length; i++) {
+                let user = data.users[i];
 
+                console.log(user);
+
+                for (let j = 0; j < this.users.length; j++) {
+                  if (this.users[j].id === user.id) {
+                    this.users[j] = user;
+                  }
+
+                  if (user.id === this.selfId) {
+                    this.count = user.count;
+                  }
+                }
+              }
               break;
             }
           }
@@ -86,6 +99,17 @@ export class AppComponent implements OnInit {
       }
     }
 
+    this.ws.next(json);
+  }
+
+  addTute(user: Number) {
+    let json = {
+      function: 'add',
+      data: {
+        user: user
+      }
+    }
+    
     this.ws.next(json);
   }
 }

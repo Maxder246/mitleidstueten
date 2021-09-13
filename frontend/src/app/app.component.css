@@ -1,0 +1,9 @@
+button.add {
+  float: right;
+  height: 5rem;
+  width: 5rem;
+  margin-right: 20px;
+  padding: 0px;
+  font-size: 2rem;
+  cursor: pointer;
+}

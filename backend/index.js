@@ -7,16 +7,21 @@ var wss = new ws.Server({ server });
 
 let users = [
     {
-
         id: 1,
         username: 'paul',
-        bez: 'paul',
+        bez: 'Paul',
         count: 5
     },
     {
         id: 2,
         username: 'max',
         bez: 'Max',
+        count: 5
+    },
+    {
+        id: 3,
+        username: 'carry',
+        bez: 'Carry',
         count: 5
     }
 
@@ -36,6 +41,8 @@ wss.on('connection', (ws, request) => {
                     if (users[i].username === json.data.username) {
                         json.data = users[i];
 
+                        ws.id = users[i].id;
+
                         ws.send(JSON.stringify(json));
                         break;
                     }
@@ -43,9 +50,45 @@ wss.on('connection', (ws, request) => {
 
                 break;
             }
+            case 'add': {
+
+                let from, to = -1;
+
+                if (ws.id !== json.data.user) {
+                    for (var i = 0; i < users.length; i++) {
+                        if (users[i].id === json.data.user) {
+                            to = i;
+                        } else if (users[i].id === ws.id) {
+                            from = i;
+                        }
+                    }
+
+                    if (from >= 0 && to >= 0) {
+                        if (users[from].count > 0) {
+                            users[from].count -= 1;
+                            users[to].count += 1;
+
+                            wss.clients.forEach((client) => {
+                                json = {
+                                    function: 'update',
+                                    data: {
+                                        users: [
+                                            users[from],
+                                            users[to]
+                                        ]
+                                    }
+                                }
+                                client.send(JSON.stringify(json));
+                            });
+                        }
+                    }
+                }
+
+                break;
+            }
             case 'update': {
                 wss.clients.forEach((client) => {
-                    if (client.readyState === WebSocket.OPEN) {
+                    if (client.id == json.data.user && client.readyState == WebSocket.OPEN) {
                         client.send(message);
                     }
                 });
