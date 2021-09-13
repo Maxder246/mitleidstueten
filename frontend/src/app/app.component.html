@@ -1,0 +1,19 @@
+<div *ngIf="selfId === -1">
+  <input placeholder="Benutzername" [(ngModel)]="username" (change)="login();">
+</div>
+
+<div *ngIf="selfId > 0">
+  <label>{{Self.count}}</label>
+
+  <div style="border: 2px solid black; height: 5rem; border-radius: 5px; padding: 10px; margin: 10px; overflow: hidden;"
+    *ngFor="let user of users">
+
+    <h1 style="float: left;">{{user.bez}}</h1>
+
+    <div style="float: right;">
+      <h1 style="float: right;">{{user.count}}</h1>
+
+      <button style="float: right; height: 5rem; width: 5rem; margin-right: 20px;"></button>
+    </div>
+  </div>
+</div>
